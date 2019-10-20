@@ -1,0 +1,43 @@
+# Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
+AWSTemplateFormatVersion:          2010-09-09
+Description:                       Set up Cloud Watch Log Groups for the application/core accounts with the standard naming convention.
+
+Parameters:
+  TypeOfAccount:
+    Type: String
+    Description: BKU or Backbase
+Resources:
+  #Cloud Watch Log Groups
+  CloudWatchLogGroupForConfig:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Join ["-", [!Ref TypeOfAccount,!Ref "AWS::AccountId", "Config"]]
+      RetentionInDays: 90
+  CloudWatchLogGroupForCT:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Join ["-", [!Ref TypeOfAccount,!Ref "AWS::AccountId", "CT"]]
+      RetentionInDays: 90
+  CloudWatchLogGroupForVPC:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Join ["-", [!Ref TypeOfAccount,!Ref "AWS::AccountId", "VPC"]]
+      RetentionInDays: 90
+Outputs:
+  CloudWatchLogGroupConfigArnExport:
+    Description:                   ARN for the CloudWatchLogGroupForConfig
+    Export:
+      Name:                        CloudWatchLogGroupForConfigArn
+    Value:                         !GetAtt 'CloudWatchLogGroupForConfig.Arn'
+  CloudWatchLogGroupCTArnExport:
+    Description:                   ARN for the CloudWatchLogGroupForCT
+    Export:
+      Name:                        CloudWatchLogGroupForCTArn
+    Value:                         !GetAtt 'CloudWatchLogGroupForCT.Arn'
+  CloudWatchLogGroupVPCArnExport:
+    Description:                   ARN for the CloudWatchLogGroupForVPC
+    Export:
+      Name:                        CloudWatchLogGroupForVPCArn
+    Value:                         !GetAtt 'CloudWatchLogGroupForVPC.Arn'
